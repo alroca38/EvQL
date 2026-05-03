@@ -3,6 +3,7 @@ import { User } from "./user.entity";
 
 export class Course{
     constructor(
+        public id: string,
         public name: string,
         public code: string,
         public period: string,
