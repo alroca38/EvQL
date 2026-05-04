@@ -2,8 +2,8 @@ import { Role } from "./role.enum";
 
 export class User {
     constructor(
-        public id: string,
-        public code: number,
+        public id: string | undefined,
+        public code: string,
         public firstName: string,
         public lastName: string,
         public email: string,
