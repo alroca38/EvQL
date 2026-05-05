@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { IChallengeRepository } from '../../../domain/repositories/challenge.repository';
+import { type IChallengeRepository } from '../../../domain/repositories/challenge.repository';
 
 @Injectable()
 export class GetChallengesUseCase {

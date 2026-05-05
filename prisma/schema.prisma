@@ -27,3 +27,18 @@ model UserModel {
 
   @@map("users")
 }
+
+model Challenge {
+  id             String   @id
+  title          String
+  description    String
+  difficulty     String
+  tags           String[]
+  databaseEngine String
+  timeLimit      Int
+  status         String
+  courseId       String
+  createdById    String
+
+  @@map("challenges")
+}

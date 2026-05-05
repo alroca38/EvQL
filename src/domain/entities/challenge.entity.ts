@@ -1,6 +1,5 @@
 import { ChallengeStatus } from './challenge-status.enum';
 import { DatabaseEngine } from './database-engine.enum';
-import { User } from './user.entity';
 
 export class Challenge{
     constructor(
@@ -10,9 +9,9 @@ export class Challenge{
         public difficulty: string,
         public tags: string[],
         public databaseEngine: DatabaseEngine,
-        public timelimit: number,
+        public timeLimit: number,
         public status: ChallengeStatus,
         public courseId: string,
-        public createdBy: User,
+        public createdById: string,
     ){}
 }

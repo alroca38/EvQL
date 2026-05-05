@@ -20,7 +20,7 @@ export class PrismaChallengeRepository implements IChallengeRepository {
         timeLimit: challenge.timeLimit,
         status: challenge.status,
         courseId: challenge.courseId,
-        createdBy: challenge.createdBy,
+        createdById: challenge.createdById,
       },
     });
   }
@@ -48,7 +48,7 @@ export class PrismaChallengeRepository implements IChallengeRepository {
         timeLimit: challenge.timeLimit,
         status: challenge.status,
         courseId: challenge.courseId,
-        createdBy: challenge.createdBy,
+        createdById: challenge.createdById,
       },
     });
   }

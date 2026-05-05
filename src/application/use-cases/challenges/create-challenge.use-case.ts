@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { IChallengeRepository } from '../../../domain/repositories/challenge.repository';
+import { type IChallengeRepository } from '../../../domain/repositories/challenge.repository';
 import { Challenge } from '../../../domain/entities/challenge.entity';
 import { randomUUID } from 'crypto';
 
@@ -18,10 +18,10 @@ export class CreateChallengeUseCase {
       data.difficulty!,
       data.tags!,
       data.databaseEngine!,
-      data.timelimit!,
+      data.timeLimit!,
       data.status!,
       data.courseId!,
-      data.createdBy!,
+      data.createdById!,
     );
 
     return this.repo.create(challenge);
