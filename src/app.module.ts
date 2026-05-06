@@ -5,6 +5,9 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
 import { AuthModule } from './infrastructure/auth/auth.module';
+import { Challenge } from './domain/entities/challenge.entity';
+import { ChallengeSchema } from './domain/entities/challenge-schema.entity';
+import { ChallengeSchemaModule } from './infrastructure/modules/challenge-schema.module';
 
 // Controller
 import { ChallengeController } from './infrastructure/controllers/challenge.controller';
@@ -53,6 +56,7 @@ import { UpdateChallengeStatusUseCase } from './application/use-cases/challenges
     DeleteChallengeUseCase,
     GetChallengesByCourseUseCase,
     UpdateChallengeStatusUseCase,
+    ChallengeSchemaModule
   ],
 })
 export class AppModule {}
