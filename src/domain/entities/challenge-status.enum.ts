@@ -1,5 +1,5 @@
 export enum ChallengeStatus {
-    draft = "Draft",
-    published = "Published",
-    archived = "Archived"
+    draft = "draft",
+    published = "published",
+    archived = "archived"
 }
