@@ -27,3 +27,19 @@ model UserModel {
 
   @@map("users")
 }
+
+model ChallengeSchemaModel {
+  id          String    @id @default(uuid())
+  challengeId String    @unique
+  ddlScript   String
+  seedScript  String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  // PENDING:
+  // challenge ChallengeModel @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+
+  @@map("challenge_schemas")
+}
+
+// IN CHALLENGE:
+// schema ChallengeSchemaModel
