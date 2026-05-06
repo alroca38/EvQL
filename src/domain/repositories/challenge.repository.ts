@@ -8,7 +8,6 @@ export interface IChallengeRepository {
   findById(id: string): Promise<Challenge | null>;
   update(id: string, data: Partial<Challenge>): Promise<Challenge>;
   delete(id: string): Promise<void>;
-
   findByCourseId(courseId: string): Promise<Challenge[]>;
   updateStatus(challengeId: string, status: ChallengeStatus): Promise<void>;
 }

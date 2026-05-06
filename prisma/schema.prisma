@@ -28,7 +28,7 @@ model UserModel {
   @@map("users")
 }
 
-model Challenge {
+model ChallengeModel {
   id             String   @id
   title          String
   description    String
@@ -38,7 +38,7 @@ model Challenge {
   timeLimit      Int
   status         String
   courseId       String
-  createdById    String
+  createdBy    String
 
   @@map("challenges")
 }

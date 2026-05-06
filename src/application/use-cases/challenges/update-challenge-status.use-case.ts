@@ -1,15 +1,15 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { ChallengeStatus } from '../../../domain/entities/challenge-status.enum';
 import type { IChallengeRepository } from '../../../domain/repositories/challenge.repository';
-import { Challenge } from '../../../domain/entities/challenge.entity';
 
 @Injectable()
-export class UpdateChallengeUseCase {
+export class UpdateChallengeStatusUseCase {
   constructor(
     @Inject('IChallengeRepository')
     private readonly repo: IChallengeRepository,
   ) {}
 
-  async execute(id: string, data: Partial<Challenge>) {
-    return this.repo.update(id, data);
+  async execute(id: string, status: ChallengeStatus) {
+    await this.repo.updateStatus(id, status);
   }
 }

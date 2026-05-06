@@ -6,7 +6,7 @@ import { randomUUID } from 'crypto';
 @Injectable()
 export class CreateChallengeUseCase {
   constructor(
-    @Inject('ChallengeRepository')
+    @Inject('IChallengeRepository')
     private readonly repo: IChallengeRepository,
   ) {}
 
@@ -21,7 +21,7 @@ export class CreateChallengeUseCase {
       data.timeLimit!,
       data.status!,
       data.courseId!,
-      data.createdById!,
+      data.createdBy!,
     );
 
     return this.repo.create(challenge);
