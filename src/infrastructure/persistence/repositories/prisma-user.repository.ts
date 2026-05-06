@@ -30,6 +30,13 @@ export class PrismaUserRepository implements IUserRepository {
         return PostgresUserMapper.toDomain(savedUser);
     }
 
+    async findById(id: string): Promise<User | null> {
+        const user = await this.prisma.userModel.findUnique({
+            where: { id },
+        });
+        return user ? PostgresUserMapper.toDomain(user) : null;
+    }
+
     async findByUsername(username: string): Promise<User | null> {
         const user = await this.prisma.userModel.findUnique({
             where: { username },
