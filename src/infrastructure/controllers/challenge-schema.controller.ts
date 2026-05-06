@@ -19,7 +19,7 @@ export class ChallengeSchemaController {
     ) {}
 
     @Put()
-    @Roles(Role.TEACHER, Role.ADMIN)
+    @Roles(Role.PROFESSOR, Role.ADMIN)
     @ApiOperation({ summary: 'Upload or replace the SQL schema for a challenge' })
     @ApiParam({ name: 'challengeId', type: String })
     async upload(@Param('challengeId', ParseUUIDPipe) challengeId: string, @Body() dto: UploadSchemaRequestDto) {
@@ -27,7 +27,7 @@ export class ChallengeSchemaController {
     }
 
     @Get()
-    @Roles(Role.TEACHER, Role.ADMIN, Role.STUDENT)
+    @Roles(Role.PROFESSOR, Role.ADMIN, Role.STUDENT)
     @ApiOperation({ summary: 'Get the SQL schema for a challenge' })
     @ApiParam({ name: 'challengeId', type: String })
     async get(@Param('challengeId', ParseUUIDPipe) challengeId: string) {

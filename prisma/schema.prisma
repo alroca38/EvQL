@@ -22,6 +22,8 @@ model UserModel {
   username     String   @unique
   passwordHash String
   role         Role     @default(STUDENT)
+  taughtCourses CourseModel[]            @relation("ProfessorCourses")
+  enrolledCourses  CourseEnrollmentModel[]
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
@@ -43,3 +45,31 @@ model ChallengeSchemaModel {
 
 // IN CHALLENGE:
 // schema ChallengeSchemaModel
+
+model CourseModel {
+  id          String   @id @default(uuid())
+  name        String
+  code        String   @unique
+  period      String
+  group       String
+  professorId String
+
+  professor   UserModel              @relation("ProfessorCourses", fields: [professorId], references: [id])
+  students    CourseEnrollmentModel[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("courses")
+}
+
+model CourseEnrollmentModel {
+  courseId    String
+  studentId   String
+
+  course      CourseModel @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  student     UserModel   @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@id([courseId, studentId])
+  @@map("course_enrollments")
+}
