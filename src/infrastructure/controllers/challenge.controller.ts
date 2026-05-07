@@ -18,8 +18,14 @@ import { UpdateChallengeStatusUseCase } from '../../application/use-cases/challe
 import { CreateChallengeDto } from '../../application/dtos/create-challenge.dto';
 import { UpdateChallengeDto } from '../../application/dtos/update-challenge.dto';
 import { ChallengeStatus } from '../../domain/entities/challenge-status.enum';
+import { UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Role } from '../../domain/entities/role.enum';
 
 @Controller('challenges')
+@UseGuards(AuthGuard('jwt'), RolesGuard)
 export class ChallengeController {
   constructor(
     private createUseCase: CreateChallengeUseCase,
@@ -32,6 +38,7 @@ export class ChallengeController {
   ) {}
 
   @Post()
+  @Roles(Role.ADMIN, Role.PROFESSOR)
   create(@Body() body: CreateChallengeDto) {
     return this.createUseCase.execute(body);
   }
@@ -52,6 +59,7 @@ export class ChallengeController {
   }
 
   @Patch(':id')
+  @Roles(Role.ADMIN, Role.PROFESSOR)
   update(@Param('id') id: string, @Body() body: UpdateChallengeDto) {
     return this.updateUseCase.execute(id, body);
   }
@@ -65,6 +73,7 @@ export class ChallengeController {
   }
 
   @Delete(':id')
+  @Roles(Role.ADMIN, Role.PROFESSOR)
   remove(@Param('id') id: string) {
     return this.deleteUseCase.execute(id);
   }
