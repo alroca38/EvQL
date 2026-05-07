@@ -26,7 +26,7 @@ import { LoginUseCase } from '../../application/use-cases/login.use-case';
     LoginUseCase,
     PrismaService,
     {
-      provide: 'IUserRepository', // token @Inject del UseCase
+      provide: 'IUserRepository',
       useClass: PrismaUserRepository,
     },
   ],
