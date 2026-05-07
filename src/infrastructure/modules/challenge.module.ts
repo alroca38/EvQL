@@ -36,5 +36,11 @@ import { AuthModule } from '../auth/auth.module';
     UpdateChallengeStatusUseCase,
     UpdateChallengeUseCase,
   ],
+
+  exports: [
+    'IChallengeRepository',
+    GetChallengeUseCase,
+    GetChallengesUseCase,
+  ],
 })
 export class ChallengeModule {}
