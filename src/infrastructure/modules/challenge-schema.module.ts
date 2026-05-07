@@ -4,6 +4,7 @@ import { UploadChallengeSchemaUseCase } from '../../application/use-cases/upload
 import { GetChallengeSchemaUseCase } from '../../application/use-cases/get-challenge-schema.use-case';
 import { PrismaService } from '../persistence/prisma.service';
 import { PrismaChallengeSchemaRepository } from '../persistence/repositories/prisma-challenge-schema.repository';
+import { PrismaChallengeRepository } from '../persistence/repositories/prisma-challenge.repository';
 
 @Module({
   controllers: [ChallengeSchemaController],
@@ -15,15 +16,11 @@ import { PrismaChallengeSchemaRepository } from '../persistence/repositories/pri
       provide: 'IChallengeSchemaRepository',
       useClass: PrismaChallengeSchemaRepository,
     },
-    // TODO: reemplazar por PrismaChallengeRepository cuando
-    // el módulo de retos esté listo
     {
       provide: 'IChallengeRepository',
-      useValue: {
-        findById: async (id: string) => ({ id }),
-      },
+      useClass: PrismaChallengeRepository,
     },
   ],
-  exports: ['IChallengeSchemaRepository'],
+  exports: ['IChallengeSchemaRepository, IChallengeRepository'],
 })
 export class ChallengeSchemaModule {}

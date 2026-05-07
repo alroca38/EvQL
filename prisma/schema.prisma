@@ -39,6 +39,7 @@ model ChallengeModel {
   databaseEngine String
   timeLimit      Int
   status         String
+  schema         ChallengeSchemaModel?
   courseId       String
   createdBy    String
 
@@ -46,20 +47,16 @@ model ChallengeModel {
 }
   
 model ChallengeSchemaModel {
-  id          String    @id @default(uuid())
-  challengeId String    @unique
+  id          String          @id @default(uuid())
+  challengeId String          @unique
   ddlScript   String
   seedScript  String?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  // PENDING:
-  // challenge ChallengeModel @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+  challenge   ChallengeModel  @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
 
   @@map("challenge_schemas")
 }
-
-// IN CHALLENGE:
-// schema ChallengeSchemaModel
 
 model CourseModel {
   id          String   @id @default(uuid())
