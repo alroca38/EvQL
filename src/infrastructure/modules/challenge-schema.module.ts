@@ -21,6 +21,6 @@ import { PrismaChallengeRepository } from '../persistence/repositories/prisma-ch
       useClass: PrismaChallengeRepository,
     },
   ],
-  exports: ['IChallengeSchemaRepository, IChallengeRepository'],
+  exports: ['IChallengeSchemaRepository', 'IChallengeRepository'],
 })
 export class ChallengeSchemaModule {}
