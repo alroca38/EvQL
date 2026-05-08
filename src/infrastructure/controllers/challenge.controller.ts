@@ -23,9 +23,12 @@ import { AuthGuard } from '@nestjs/passport';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Role } from '../../domain/entities/role.enum';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
-@Controller('challenges')
+@ApiTags('Challenges')
+@ApiBearerAuth()
 @UseGuards(AuthGuard('jwt'), RolesGuard)
+@Controller('challenges')
 export class ChallengeController {
   constructor(
     private createUseCase: CreateChallengeUseCase,
@@ -44,6 +47,7 @@ export class ChallengeController {
   }
 
   @Get()
+  @Roles(Role.ADMIN, Role.PROFESSOR)
   findAll() {
     return this.getAllUseCase.execute();
   }

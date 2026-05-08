@@ -16,8 +16,6 @@ import { UpdateChallengeUseCase } from '../../application/use-cases/challenges/u
 import { AuthModule } from '../auth/auth.module';
 
 @Module({
-  imports: [AuthModule],
-
   controllers: [ChallengeController],
 
   providers: [

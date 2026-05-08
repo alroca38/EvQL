@@ -36,7 +36,7 @@ export class CourseController {
   @Roles(Role.PROFESSOR, Role.ADMIN)
   @ApiOperation({ summary: 'Create a new course' })
   async create(@Body() dto: CreateCourseRequestDto, @Req() req: any) {
-    return this.createCourse.execute(dto, req.user.id);
+    return this.createCourse.execute(dto, req.user.userId);
   }
 
   @Get()
