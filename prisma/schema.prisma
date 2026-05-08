@@ -85,3 +85,19 @@ model CourseEnrollmentModel {
   @@id([courseId, studentId])
   @@map("course_enrollments")
 }
+
+model SubmissionModel {
+  id          String   @id @default(uuid())
+  studentId   String
+  challengeId String
+  engine      String
+  query       String
+  status      String   @default("QUEUED")
+  score       Int?
+  executionTimeMs Int?
+  feedback    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("submissions")
+}
