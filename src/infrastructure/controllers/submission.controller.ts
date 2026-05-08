@@ -6,9 +6,12 @@ import { Role } from '../../domain/entities/role.enum';
 import { SubmitSolutionUseCase } from '../../application/use-cases/submissions/submit-solution.use-case';
 import { GetMySubmissionsUseCase } from '../../application/use-cases/submissions/get-my-submissions.use-case';
 import { CreateSubmissionRequestDto } from '../../application/dtos/create-submission.request.dto';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
-@Controller('submissions')
+@ApiTags('Submissions')
+@ApiBearerAuth()
 @UseGuards(AuthGuard('jwt'), RolesGuard)
+@Controller('submissions')
 export class SubmissionController {
   constructor(
     private readonly submitUseCase: SubmitSolutionUseCase,
@@ -16,7 +19,7 @@ export class SubmissionController {
   ) {}
 
   @Post()
-  @Roles(Role.STUDENT)
+  @Roles(Role.STUDENT, Role.PROFESSOR)
   async submit(@Request() req: any, @Body() dto: CreateSubmissionRequestDto) {
     const studentId: string = req.user.userId;
     const submission = await this.submitUseCase.execute(studentId, dto);

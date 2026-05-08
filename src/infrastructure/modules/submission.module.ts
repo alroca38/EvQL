@@ -12,7 +12,6 @@ import { GetMySubmissionsUseCase } from '../../application/use-cases/submissions
 
 @Module({
   imports: [
-    AuthModule,
     BullModule.registerQueue({
       name: SUBMISSION_QUEUE,
     }),

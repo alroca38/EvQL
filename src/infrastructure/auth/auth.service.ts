@@ -9,7 +9,7 @@ export class AuthService {
   async generateToken(user: User) {
     const payload = { 
       email: user.email,
-      sub: user.code,
+      sub: user.id,
       role: user.role
     };
     return {

@@ -34,12 +34,12 @@ services:
     container_name: evql-api
     restart: always
     depends_on:
-      db:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
+     db:
+       condition: service_healthy
+     redis:
+       condition: service_healthy
     ports:
-      - "3000:3000"
+     - "3000:3000"
     environment:
       DATABASE_URL: postgresql://evql_user:alro_mato_2026@db:5432/evql-platform
       REDIS_HOST: redis

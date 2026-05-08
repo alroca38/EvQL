@@ -29,7 +29,7 @@ export class LoginUseCase {
     const token = await this.authService.generateToken(user);
 
     return {
-      accessToken: token,
+      accessToken: token.access_token,
     };
   }
 }
