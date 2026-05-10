@@ -1,0 +1,103 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  ADMIN
+  PROFESSOR
+  STUDENT
+}
+
+model UserModel {
+  id           String   @id @default(uuid())
+  code         String   @unique
+  firstName    String
+  lastName     String
+  email        String   @unique
+  username     String   @unique
+  passwordHash String
+  role         Role     @default(STUDENT)
+  taughtCourses CourseModel[]            @relation("ProfessorCourses")
+  enrolledCourses  CourseEnrollmentModel[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("users")
+}
+
+model ChallengeModel {
+  id             String   @id
+  title          String
+  description    String
+  difficulty     String
+  tags           String[]
+  databaseEngine String
+  timeLimit      Int
+  status         String
+  schema         ChallengeSchemaModel?
+  courseId       String
+  createdBy    String
+
+  @@map("challenges")
+}
+  
+model ChallengeSchemaModel {
+  id          String          @id @default(uuid())
+  challengeId String          @unique
+  ddlScript   String
+  seedScript  String?
+  challenge   ChallengeModel  @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  @@map("challenge_schemas")
+}
+
+model CourseModel {
+  id          String   @id @default(uuid())
+  name        String
+  code        String   @unique
+  period      String
+  group       String
+  professorId String
+
+  professor   UserModel              @relation("ProfessorCourses", fields: [professorId], references: [id])
+  students    CourseEnrollmentModel[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("courses")
+}
+
+model CourseEnrollmentModel {
+  courseId    String
+  studentId   String
+
+  course      CourseModel @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  student     UserModel   @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@id([courseId, studentId])
+  @@map("course_enrollments")
+}
+
+model SubmissionModel {
+  id          String   @id @default(uuid())
+  studentId   String
+  challengeId String
+  engine      String
+  query       String
+  status      String   @default("QUEUED")
+  score       Int?
+  executionTimeMs Int?
+  feedback    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("submissions")
+}

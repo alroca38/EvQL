@@ -1,0 +1,50 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: psql-evql-db
+    restart: always
+    environment:
+      POSTGRES_DB: evql-platform
+      POSTGRES_USER: evql_user
+      POSTGRES_PASSWORD: alro_mato_2026
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata-evql:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+  
+  redis:
+    image: redis:7-alpine
+    container_name: redis-evql
+    restart: always
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build: .
+    container_name: evql-api
+    restart: always
+    depends_on:
+     db:
+       condition: service_healthy
+     redis:
+       condition: service_healthy
+    ports:
+     - "3000:3000"
+    environment:
+      DATABASE_URL: postgresql://evql_user:alro_mato_2026@db:5432/evql-platform
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      JWT_SECRET: ${JWT_SECRET:-super_secret_jwt_key}
+
+volumes:
+  pgdata-evql:

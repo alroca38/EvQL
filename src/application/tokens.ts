@@ -1,0 +1,2 @@
+export const USER_REPOSITORY = Symbol("USER_REPOSITORY");
+export const COURSE_REPOSITORY = Symbol("COURSE_REPOSITORY");
