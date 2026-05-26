@@ -3,16 +3,14 @@ services:
     image: postgres:16-alpine
     container_name: psql-evql-db
     restart: always
-    environment:
-      POSTGRES_DB: evql-platform
-      POSTGRES_USER: evql_user
-      POSTGRES_PASSWORD: alro_mato_2026
+    env_file:
+      - .env
     ports:
       - "5432:5432"
     volumes:
       - pgdata-evql:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d ${DB_DATABASE}"]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -42,11 +40,8 @@ services:
      - "3000:3000"
     volumes:
      - /var/run/docker.sock:/var/run/docker.sock
-    environment:
-      DATABASE_URL: postgresql://evql_user:alro_mato_2026@db:5432/evql-platform
-      REDIS_HOST: redis
-      REDIS_PORT: 6379
-      JWT_SECRET: ${JWT_SECRET:-super_secret_jwt_key}
+    env_file:
+      - .env
 
 volumes:
   pgdata-evql:

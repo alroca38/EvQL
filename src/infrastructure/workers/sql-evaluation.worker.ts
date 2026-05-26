@@ -143,8 +143,8 @@ export class SqlEvaluationWorker extends WorkerHost {
         const analysis = await this.sqlAssistant.analyze({
           query,
           ddlScript: ddlScript ?? 'No schema provided',
-          executionTimeMs: stubTimeMs,
-          status: stubStatus,
+          executionTimeMs: executionTimeMs,
+          status: status,
         });
 
         feedback = JSON.stringify(analysis, null, 2);

@@ -1,29 +1,23 @@
-FROM node:20-alpine AS development
-WORKDIR /app
-RUN apk add --no-cache openssl
-COPY package*.json ./
-RUN npm ci
-COPY . .
-RUN npx prisma generate
-RUN npm run build
-
-
-FROM node:20-alpine AS build-prod
+FROM node:20-alpine AS builder
 WORKDIR /app
 RUN apk add --no-cache openssl
 COPY package*.json ./
 COPY prisma ./prisma/
-RUN npm ci --only=production
-RUN npx prisma generate && npm cache clean --force
-
+RUN npm ci
+COPY . .
+RUN npx prisma generate
+RUN npm run build
+RUN npm prune --production
 
 FROM node:20-alpine AS production
 WORKDIR /app
 RUN apk add --no-cache openssl
 ENV NODE_ENV=production
-COPY --from=build-prod /app/node_modules ./node_modules
-COPY --from=development /app/dist ./dist
-COPY package*.json ./
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/prisma ./prisma 
+
 USER node
 EXPOSE 3000
 CMD ["node", "dist/main"]
