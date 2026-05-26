@@ -4,6 +4,7 @@ import { Inject, Logger } from '@nestjs/common';
 import { SUBMISSION_QUEUE } from '../../application/use-cases/submissions/submit-solution.use-case';
 import type { ISubmissionRepository } from '../../domain/repositories/submission.repository';
 import { SubmissionStatus } from '../../domain/entities/submission-status.enum';
+import { SqlAssistantService } from '../../application/services/sql-assistant.service';
 import type { IChallengeSchemaRepository } from '../../domain/repositories/challenge-schema.repository';
 import Docker from 'dockerode';
 import { randomUUID } from 'crypto';
@@ -14,6 +15,9 @@ export interface EvaluationJobPayload {
   challengeId: string;
   engine: string;
   query: string;
+  ddlScript?: string;
+  executionTimeMs?: number;
+  status?: string;
 }
 
 @Processor(SUBMISSION_QUEUE)
@@ -23,6 +27,7 @@ export class SqlEvaluationWorker extends WorkerHost {
   constructor(
     @Inject('ISubmissionRepository')
     private readonly submissionRepo: ISubmissionRepository,
+    private readonly sqlAssistant: SqlAssistantService,
     @Inject('IChallengeSchemaRepository')
     private readonly challengeSchemaRepo: IChallengeSchemaRepository,
   ) {
@@ -30,7 +35,7 @@ export class SqlEvaluationWorker extends WorkerHost {
   }
 
   async process(job: Job<EvaluationJobPayload>): Promise<void> {
-    const { submissionId, challengeId, engine, query } = job.data;
+    const { submissionId, challengeId, engine, query, ddlScript, executionTimeMs, status } = job.data;
 
     this.logger.log(
       `[Job ${job.id}] Processing submission ${submissionId} | challenge: ${challengeId} | engine: ${engine}`,
@@ -39,7 +44,6 @@ export class SqlEvaluationWorker extends WorkerHost {
     let container: any = null;
     try {
       await this.submissionRepo.updateStatus(submissionId, SubmissionStatus.RUNNING);
-      this.logger.log(`[Job ${job.id}] Submission ${submissionId} → RUNNING`);
 
      
       const dbConfig = {
@@ -134,7 +138,21 @@ export class SqlEvaluationWorker extends WorkerHost {
       let status = SubmissionStatus.ACCEPTED;
       let score = 100;
       let feedback = '¡Correcto!';
+      /////////////////////////////////////////////////////////////
+      try {
+        const analysis = await this.sqlAssistant.analyze({
+          query,
+          ddlScript: ddlScript ?? 'No schema provided',
+          executionTimeMs: stubTimeMs,
+          status: stubStatus,
+        });
 
+        feedback = JSON.stringify(analysis, null, 2);
+        this.logger.log(`[Job ${job.id}] AI analysis generated successfully`);
+      } catch (aiError) {
+        this.logger.warn(`[Job ${job.id}] AI analysis failed, using fallback`, aiError);
+      }
+      /////////////////////////////////////////////////////////////
       if (submissionError) {
         if (submissionError.message && submissionError.message.includes('syntax')) {
           status = SubmissionStatus.SYNTAX_ERROR;
@@ -154,9 +172,6 @@ export class SqlEvaluationWorker extends WorkerHost {
         }
       }
 
-      
-
-      
       const recommendations: string[] = [];
       if (query.match(/select\s+\*/i)) {
         recommendations.push('Evita usar SELECT *; especifica solo las columnas necesarias.');
@@ -207,6 +222,7 @@ export class SqlEvaluationWorker extends WorkerHost {
 
       await container.stop();
       this.logger.log(`[Job ${job.id}] Contenedor PostgreSQL eliminado`);
+
     } catch (error) {
       this.logger.error(
         `[Job ${job.id}] Failed to process submission ${submissionId}`,
