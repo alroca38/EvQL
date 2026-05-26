@@ -8,14 +8,11 @@ import { Role } from "../../domain/entities/role.enum";
 import { Roles } from "../auth/decorators/roles.decorator";
 
 @ApiTags('Users')
-@ApiBearerAuth()
-@UseGuards(AuthGuard('jwt'), RolesGuard)
 @Controller('users')
 export class UserController {
     constructor(private readonly registerUserUseCase: RegisterUserUseCase) {}
 
     @Post('register')
-    @Roles(Role.ADMIN)
     @ApiOperation({ summary: 'Register a new user' })
     async register(@Body() registerDto: RegisterUserRequestDto) {
         return await this.registerUserUseCase.execute(registerDto)

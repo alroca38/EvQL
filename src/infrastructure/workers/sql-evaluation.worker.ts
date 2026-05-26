@@ -36,6 +36,7 @@ export class SqlEvaluationWorker extends WorkerHost {
       `[Job ${job.id}] Processing submission ${submissionId} | challenge: ${challengeId} | engine: ${engine}`,
     );
 
+    let container: any = null;
     try {
       await this.submissionRepo.updateStatus(submissionId, SubmissionStatus.RUNNING);
       this.logger.log(`[Job ${job.id}] Submission ${submissionId} → RUNNING`);
@@ -47,7 +48,7 @@ export class SqlEvaluationWorker extends WorkerHost {
         POSTGRES_DB: `db_${randomUUID().slice(0, 8)}`,
       };
       const docker = new Docker();
-      const container = await docker.createContainer({
+      container = await docker.createContainer({
         Image: 'postgres:16',
         Env: [
           `POSTGRES_USER=${dbConfig.POSTGRES_USER}`,
@@ -60,29 +61,37 @@ export class SqlEvaluationWorker extends WorkerHost {
           Memory: 512 * 1024 * 1024, 
           NanoCpus: 500_000_000, 
         },
+        NetworkingConfig: {
+          EndpointsConfig: {
+            evql_default: {},
+          },
+        },
       });
       await container.start();
 
+      await this.sleep(3000);
       
       const inspect = await container.inspect();
-      const hostPort = inspect.NetworkSettings.Ports['5432/tcp'][0].HostPort;
 
-      this.logger.log(`[Job ${job.id}] Contenedor PostgreSQL iniciado en puerto ${hostPort}`);
+      const networkInfo = inspect.NetworkSettings.Networks['evql_default'];
 
-    
-      await this.sleep(3000);
-
+      if (!networkInfo || !networkInfo.IPAddress) {
+        throw new Error(`Docker no asignó una IP en la red evql_default para el contenedor de pruebas.`);
+      }
+      
+      const containerIp = networkInfo.IPAddress;
+      this.logger.log(`[Job ${job.id}] Contenedor PostgreSQL iniciado en la IP interna ${containerIp}`);
       
       const challengeSchema = await this.challengeSchemaRepo.findByChallengeId(challengeId);
       if (!challengeSchema) {
         throw new Error(`No se encontró el esquema para el challenge ${challengeId}`);
       }
+
       const { ddlScript, seedScript } = challengeSchema;
 
-
       const pgClient = new PgClient({
-        host: 'localhost',
-        port: parseInt(hostPort, 10),
+        host: containerIp,
+        port: 5432,
         user: dbConfig.POSTGRES_USER,
         password: dbConfig.POSTGRES_PASSWORD,
         database: dbConfig.POSTGRES_DB,
@@ -203,6 +212,17 @@ export class SqlEvaluationWorker extends WorkerHost {
         `[Job ${job.id}] Failed to process submission ${submissionId}`,
         error,
       );
+      if (container) {
+        try {
+          await container.stop();
+          this.logger.log(`[Job ${job.id}] Contenedor PostgreSQL eliminado tras error`);
+        } catch (cleanupError) {
+          this.logger.error(
+            `[Job ${job.id}] Error al limpiar el contenedor tras fallo`,
+            cleanupError,
+          );
+        }
+      }
       await this.submissionRepo.updateStatus(submissionId, SubmissionStatus.RUNTIME_ERROR);
       throw error;
     }
