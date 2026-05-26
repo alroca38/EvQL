@@ -9,6 +9,7 @@ import { SqlEvaluationWorker } from '../workers/sql-evaluation.worker';
 import { PrismaSubmissionRepository } from '../persistence/repositories/prisma-submission.repository';
 import { SubmitSolutionUseCase, SUBMISSION_QUEUE } from '../../application/use-cases/submissions/submit-solution.use-case';
 import { GetMySubmissionsUseCase } from '../../application/use-cases/submissions/get-my-submissions.use-case';
+import { SqlAssistantService } from '../../application/services/sql-assistant.service';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { GetMySubmissionsUseCase } from '../../application/use-cases/submissions
     SubmitSolutionUseCase,
     GetMySubmissionsUseCase,
     SqlEvaluationWorker,
+    SqlAssistantService,
   ],
 })
 export class SubmissionModule {}
