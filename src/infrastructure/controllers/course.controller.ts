@@ -18,6 +18,7 @@ import { EnrollStudentUseCase, RemoveStudentUseCase } from '../../application/us
 import { CreateCourseRequestDto } from '../../application/dtos/create-course.request.dto';
 import { UpdateCourseRequestDto } from '../../application/dtos/update-course.request.dto';
 import { EnrollStudentRequestDto } from '../../application/dtos/enroll-student.request.dto';
+import { GetCourseStudentsUseCase } from '../../application/use-cases/get-course-students.use-case';
 
 @ApiTags('Courses')
 @ApiBearerAuth()
@@ -34,6 +35,7 @@ export class CourseController {
     private readonly removeStudent: RemoveStudentUseCase,
     private readonly getMyStudentCourses: GetMyStudentCoursesUseCase,
     private readonly getMyProfessorCourses: GetMyProfessorCoursesUseCase,
+    private readonly getCourseStudents: GetCourseStudentsUseCase,
   ) {}
 
   @Post()
@@ -62,6 +64,14 @@ export class CourseController {
   @ApiOperation({ summary: 'Get all courses taught by the current professor' })
   async findMyProfessorCourses(@Req() req: any) {
     return this.getMyProfessorCourses.execute(req.user.userId);
+  }
+
+  @Get(':id/students')
+  @Roles(Role.ADMIN, Role.PROFESSOR)
+  @ApiOperation({ summary: 'Get all students enrolled in a course' })
+  @ApiParam({ name: 'id', type: String })
+  async findStudents(@Param('id', ParseUUIDPipe) id: string) {
+    return this.getCourseStudents.execute(id);
   }
 
   @Get(':id')

@@ -24,16 +24,16 @@ export class UserController {
 
     @Get('students')
     @UseGuards(AuthGuard('jwt'), RolesGuard)
-    @Roles(Role.ADMIN)
+    @Roles(Role.ADMIN, Role.PROFESSOR)
     @ApiBearerAuth()
-    @ApiOperation({ summary: 'Get all students (admin only)' })
+    @ApiOperation({ summary: 'Get all students (admin and professor only)' })
     async getStudents() {
         return await this.getUsersByRole.execute(Role.STUDENT);
     }
 
     @Get('professors')
     @UseGuards(AuthGuard('jwt'), RolesGuard)
-    @Roles(Role.ADMIN)
+    @Roles(Role.ADMIN, Role.PROFESSOR)
     @ApiBearerAuth()
     @ApiOperation({ summary: 'Get all professors (admin only)' })
     async getProfessors() {
