@@ -33,6 +33,9 @@ export class GetEvaluationChallengeSubmissionsUseCase {
       dto.engine = sub.engine;
       dto.query = sub.query;
       dto.status = sub.status;
+      dto.score = sub.score ?? undefined;
+      dto.executionTimeMs = sub.executionTimeMs ?? undefined;
+      dto.feedback = sub.feedback ?? undefined;
       dto.createdAt = sub.createdAt;
       return dto;
     });

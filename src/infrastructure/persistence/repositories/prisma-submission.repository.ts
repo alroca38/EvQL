@@ -38,6 +38,9 @@ export class PrismaSubmissionRepository implements ISubmissionRepository {
           m.query,
           m.status as SubmissionStatus,
           m.createdAt,
+          m.score ?? null,
+          m.executionTimeMs ?? null,
+          m.feedback ?? null,
         ),
     );
   }
@@ -58,6 +61,9 @@ export class PrismaSubmissionRepository implements ISubmissionRepository {
           m.query,
           m.status as SubmissionStatus,
           m.createdAt,
+          m.score ?? null,
+          m.executionTimeMs ?? null,
+          m.feedback ?? null,
         ),
     );
   }
@@ -74,6 +80,9 @@ export class PrismaSubmissionRepository implements ISubmissionRepository {
       m.query,
       m.status as SubmissionStatus,
       m.createdAt,
+      m.score ?? null,
+      m.executionTimeMs ?? null,
+      m.feedback ?? null,
     );
   }
 
