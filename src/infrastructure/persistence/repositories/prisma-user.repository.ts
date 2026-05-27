@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { IUserRepository } from "../../../domain/repositories/user.repository";
 import { User } from "../../../domain/entities/user.entity";
+import { Role } from "../../../domain/entities/role.enum";
 import { PrismaService } from "../prisma.service";
 import { PostgresUserMapper } from "../../mappers/postgres-user.mapper";
 
@@ -50,5 +51,12 @@ export class PrismaUserRepository implements IUserRepository {
             where: { code },
         });
         return user ? PostgresUserMapper.toDomain(user) : null;
+    }
+
+    async findByRole(role: Role): Promise<User[]> {
+        const users = await this.prisma.userModel.findMany({
+            where: { role: role as any },
+        });
+        return users.map(PostgresUserMapper.toDomain);
     }
 }

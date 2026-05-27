@@ -10,6 +10,7 @@ import { ChallengeModule } from './infrastructure/modules/challenge.module';
 import { ChallengeSchemaModule } from './infrastructure/modules/challenge-schema.module';
 import { SubmissionModule } from './infrastructure/modules/submission.module';
 import { CourseModule } from './infrastructure/modules/course.module';
+import { EvaluationModule } from './infrastructure/modules/evaluation.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { CourseModule } from './infrastructure/modules/course.module';
     ChallengeSchemaModule,
     CourseModule,
     SubmissionModule,
+    EvaluationModule,
   ],
   controllers: [AppController],
   providers: [AppService],

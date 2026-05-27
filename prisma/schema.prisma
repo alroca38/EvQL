@@ -41,7 +41,8 @@ model ChallengeModel {
   status         String
   schema         ChallengeSchemaModel?
   courseId       String
-  createdBy    String
+  createdBy      String
+  evaluations    EvaluationModel[]
 
   @@map("challenges")
 }
@@ -68,6 +69,7 @@ model CourseModel {
 
   professor   UserModel              @relation("ProfessorCourses", fields: [professorId], references: [id])
   students    CourseEnrollmentModel[]
+  evaluations EvaluationModel[]
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -100,4 +102,22 @@ model SubmissionModel {
   updatedAt   DateTime @updatedAt
 
   @@map("submissions")
+}
+
+model EvaluationModel {
+  id          String           @id @default(uuid())
+  name        String
+  description String
+  startDate   DateTime
+  endDate     DateTime
+  duration    Int
+  maxAttempts Int
+  score       Int
+  courseId    String
+  course      CourseModel      @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  challenges  ChallengeModel[]
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  @@map("evaluations")
 }

@@ -11,6 +11,8 @@ import { GetChallengesUseCase } from '../../application/use-cases/challenges/get
 import { GetChallengesByCourseUseCase } from '../../application/use-cases/challenges/get-challenges-by-course.use-case';
 import { GetChallengeUseCase } from '../../application/use-cases/challenges/get-challenge.use-case';
 import { UpdateChallengeStatusUseCase } from '../../application/use-cases/challenges/update-challenge-status.use-case';
+import { GetMyAvailableChallengesUseCase } from '../../application/use-cases/challenges/get-my-available-challenges.use-case';
+import { GetChallengesByEvaluationUseCase } from '../../application/use-cases/challenges/get-challenges-by-evaluation.use-case';
 import { UpdateChallengeUseCase } from '../../application/use-cases/challenges/update-challenge.use-case';
 
 import { AuthModule } from '../auth/auth.module';
@@ -33,6 +35,8 @@ import { AuthModule } from '../auth/auth.module';
     GetChallengeUseCase,
     UpdateChallengeStatusUseCase,
     UpdateChallengeUseCase,
+    GetMyAvailableChallengesUseCase,
+    GetChallengesByEvaluationUseCase,
   ],
 
   exports: [

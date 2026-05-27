@@ -62,6 +62,34 @@ export class PrismaChallengeRepository implements IChallengeRepository {
     });
   }
 
+  async findAvailableForStudent(studentId: string): Promise<Challenge[]> {
+    const enrollments = await this.prisma.courseEnrollmentModel.findMany({
+      where: { studentId },
+    });
+    const courseIds = enrollments.map((e) => e.courseId);
+
+    if (courseIds.length == 0) {
+      return [];
+    }
+
+    const models = await this.prisma.challengeModel.findMany({
+      where: {
+        courseId: { in: courseIds },
+        evaluations: { none: {} },
+      },
+    });
+    return models.map((m) => ChallengeMapper.toDomain(m));
+  }
+
+  async findByEvaluationId(evaluationId: string): Promise<Challenge[]> {
+    const models = await this.prisma.challengeModel.findMany({
+      where: {
+        evaluations: { some: { id: evaluationId } },
+      },
+    });
+    return models.map((m) => ChallengeMapper.toDomain(m));
+  }
+
   async delete(id: string): Promise<void> {
     await this.prisma.challengeModel.delete({
       where: { id },

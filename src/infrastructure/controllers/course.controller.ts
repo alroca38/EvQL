@@ -11,6 +11,8 @@ import { CreateCourseUseCase } from '../../application/use-cases/create-course.u
 import { GetAllCoursesUseCase } from '../../application/use-cases/get-all-courses.use-case';
 import { GetCourseByIdUseCase } from '../../application/use-cases/get-course-by-id.use-case';
 import { UpdateCourseUseCase } from '../../application/use-cases/update-course.use-case';
+import { GetMyStudentCoursesUseCase } from '../../application/use-cases/get-my-student-courses.use-case';
+import { GetMyProfessorCoursesUseCase } from '../../application/use-cases/get-my-professor-courses.use-case';
 import { DeleteCourseUseCase } from '../../application/use-cases/delete-course.use-case';
 import { EnrollStudentUseCase, RemoveStudentUseCase } from '../../application/use-cases/enroll-student.use-case';
 import { CreateCourseRequestDto } from '../../application/dtos/create-course.request.dto';
@@ -30,6 +32,8 @@ export class CourseController {
     private readonly deleteCourse: DeleteCourseUseCase,
     private readonly enrollStudent: EnrollStudentUseCase,
     private readonly removeStudent: RemoveStudentUseCase,
+    private readonly getMyStudentCourses: GetMyStudentCoursesUseCase,
+    private readonly getMyProfessorCourses: GetMyProfessorCoursesUseCase,
   ) {}
 
   @Post()
@@ -44,6 +48,20 @@ export class CourseController {
   @ApiOperation({ summary: 'List all courses' })
   async findAll() {
     return this.getAllCourses.execute();
+  }
+
+  @Get('student/me')
+  @Roles(Role.STUDENT)
+  @ApiOperation({ summary: 'Get all courses enrolled by the current student' })
+  async findMyStudentCourses(@Req() req: any) {
+    return this.getMyStudentCourses.execute(req.user.userId);
+  }
+
+  @Get('professor/me')
+  @Roles(Role.PROFESSOR)
+  @ApiOperation({ summary: 'Get all courses taught by the current professor' })
+  async findMyProfessorCourses(@Req() req: any) {
+    return this.getMyProfessorCourses.execute(req.user.userId);
   }
 
   @Get(':id')

@@ -42,6 +42,26 @@ export class PrismaSubmissionRepository implements ISubmissionRepository {
     );
   }
 
+  async findByStudentAndChallenge(studentId: string, challengeId: string): Promise<Submission[]> {
+    const models = await this.prisma.submissionModel.findMany({
+      where: { studentId, challengeId },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    return models.map(
+      (m) =>
+        new Submission(
+          m.id,
+          m.studentId,
+          m.challengeId,
+          m.engine as DatabaseEngine,
+          m.query,
+          m.status as SubmissionStatus,
+          m.createdAt,
+        ),
+    );
+  }
+
   async findById(id: string): Promise<Submission | null> {
     const m = await this.prisma.submissionModel.findUnique({ where: { id } });
     if (!m) return null;
