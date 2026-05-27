@@ -13,8 +13,7 @@ Sistema backend para la gestión académica de cursos, evaluaciones y calificaci
 5. [Módulos y Endpoints](#módulos-y-endpoints)
 6. [Flujo de Evaluación](#flujo-de-evaluación)
 7. [Autenticación y Roles](#autenticación-y-roles)
-8. [Variables de Entorno](#variables-de-entorno)
-9. [Instalación y Ejecución](#instalación-y-ejecución)
+8. [Instalación y Ejecución](#instalación-y-ejecución)
 
 ---
 
