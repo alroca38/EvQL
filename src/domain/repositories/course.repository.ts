@@ -9,4 +9,6 @@ export interface ICourseRepository {
   delete(id: string): Promise<void>;
   addStudent(courseId: string, studentId: string): Promise<void>;
   removeStudent(courseId: string, studentId: string): Promise<void>;
+  findByStudentId(studentId: string): Promise<Course[]>;
+  findByProfessorId(professorId: string): Promise<Course[]>;
 }

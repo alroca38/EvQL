@@ -9,6 +9,8 @@ import { GetCourseByIdUseCase } from '../../application/use-cases/get-course-by-
 import { UpdateCourseUseCase } from '../../application/use-cases/update-course.use-case';
 import { DeleteCourseUseCase } from '../../application/use-cases/delete-course.use-case';
 import { EnrollStudentUseCase, RemoveStudentUseCase } from '../../application/use-cases/enroll-student.use-case';
+import { GetMyStudentCoursesUseCase } from '../../application/use-cases/get-my-student-courses.use-case';
+import { GetMyProfessorCoursesUseCase } from '../../application/use-cases/get-my-professor-courses.use-case';
 
 @Module({
   controllers: [CourseController],
@@ -21,6 +23,8 @@ import { EnrollStudentUseCase, RemoveStudentUseCase } from '../../application/us
     DeleteCourseUseCase,
     EnrollStudentUseCase,
     RemoveStudentUseCase,
+    GetMyStudentCoursesUseCase,
+    GetMyProfessorCoursesUseCase,
     {
       provide: 'ICourseRepository',
       useClass: PrismaCourseRepository,

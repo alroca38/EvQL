@@ -78,4 +78,24 @@ export class PrismaCourseRepository implements ICourseRepository {
       where: { courseId_studentId: { courseId, studentId } },
     });
   }
+
+  async findByStudentId(studentId: string): Promise<Course[]> {
+    const courses = await this.prisma.courseModel.findMany({
+      where: {
+        students: {
+          some: { studentId }
+        }
+      },
+      include
+    });
+    return courses.map(PrismaCourseMapper.toDomain);
+  }
+
+  async findByProfessorId(professorId: string): Promise<Course[]> {
+    const courses = await this.prisma.courseModel.findMany({
+      where: { professorId },
+      include
+    });
+    return courses.map(PrismaCourseMapper.toDomain);
+  }
 }

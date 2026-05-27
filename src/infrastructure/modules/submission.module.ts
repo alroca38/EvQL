@@ -11,6 +11,8 @@ import { SubmitSolutionUseCase, SUBMISSION_QUEUE } from '../../application/use-c
 import { GetMySubmissionsUseCase } from '../../application/use-cases/submissions/get-my-submissions.use-case';
 import { SqlAssistantService } from '../../application/services/sql-assistant.service';
 import { ChallengeSchemaModule } from './challenge-schema.module';
+import { EvaluationModule } from './evaluation.module';
+import { GetEvaluationChallengeSubmissionsUseCase } from '../../application/use-cases/submissions/get-evaluation-challenge-submissions.use-case';
 
 @Module({
   imports: [
@@ -18,6 +20,7 @@ import { ChallengeSchemaModule } from './challenge-schema.module';
       name: SUBMISSION_QUEUE,
     }),
     ChallengeSchemaModule,
+    EvaluationModule,
     PrismaModule,
   ],
   controllers: [SubmissionController],
@@ -28,6 +31,7 @@ import { ChallengeSchemaModule } from './challenge-schema.module';
     },
     SubmitSolutionUseCase,
     GetMySubmissionsUseCase,
+    GetEvaluationChallengeSubmissionsUseCase,
     SqlEvaluationWorker,
     SqlAssistantService,
   ],
