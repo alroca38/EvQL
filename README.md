@@ -212,25 +212,6 @@ El guard `RolesGuard` valida el rol del token contra el decorador `@Roles(...)` 
 
 ---
 
-## Variables de Entorno
-
-```env
-# Base de datos
-DATABASE_URL=postgresql://user:password@localhost:5432/evql
-
-# Redis (BullMQ)
-REDIS_HOST=localhost
-REDIS_PORT=6379
-
-# JWT
-JWT_SECRET=tu_clave_secreta
-
-# OpenAI
-OPENAI_API_KEY=sk-...
-```
-
----
-
 ## Instalación y Ejecución
 
 ### Requisitos previos
