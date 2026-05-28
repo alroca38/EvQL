@@ -9,6 +9,9 @@ export class Submission {
         public engine: DatabaseEngine,
         public query: string,
         public status: SubmissionStatus,
-        public createdAt: Date
+        public createdAt: Date,
+        public score?: number | null,
+        public executionTimeMs?: number | null,
+        public feedback?: string | null,
     ) {}
 }

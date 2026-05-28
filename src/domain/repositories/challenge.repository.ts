@@ -10,4 +10,6 @@ export interface IChallengeRepository {
   delete(id: string): Promise<void>;
   findByCourseId(courseId: string): Promise<Challenge[]>;
   updateStatus(challengeId: string, status: ChallengeStatus): Promise<void>;
+  findAvailableForStudent(studentId: string): Promise<Challenge[]>;
+  findByEvaluationId(evaluationId: string): Promise<Challenge[]>;
 }

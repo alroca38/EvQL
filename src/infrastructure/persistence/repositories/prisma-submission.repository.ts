@@ -38,6 +38,32 @@ export class PrismaSubmissionRepository implements ISubmissionRepository {
           m.query,
           m.status as SubmissionStatus,
           m.createdAt,
+          m.score ?? null,
+          m.executionTimeMs ?? null,
+          m.feedback ?? null,
+        ),
+    );
+  }
+
+  async findByStudentAndChallenge(studentId: string, challengeId: string): Promise<Submission[]> {
+    const models = await this.prisma.submissionModel.findMany({
+      where: { studentId, challengeId },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    return models.map(
+      (m) =>
+        new Submission(
+          m.id,
+          m.studentId,
+          m.challengeId,
+          m.engine as DatabaseEngine,
+          m.query,
+          m.status as SubmissionStatus,
+          m.createdAt,
+          m.score ?? null,
+          m.executionTimeMs ?? null,
+          m.feedback ?? null,
         ),
     );
   }
@@ -54,6 +80,9 @@ export class PrismaSubmissionRepository implements ISubmissionRepository {
       m.query,
       m.status as SubmissionStatus,
       m.createdAt,
+      m.score ?? null,
+      m.executionTimeMs ?? null,
+      m.feedback ?? null,
     );
   }
 
