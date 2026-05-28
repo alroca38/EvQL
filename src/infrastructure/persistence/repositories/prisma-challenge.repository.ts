@@ -75,7 +75,7 @@ export class PrismaChallengeRepository implements IChallengeRepository {
     const models = await this.prisma.challengeModel.findMany({
       where: {
         courseId: { in: courseIds },
-        evaluations: { none: {} },
+        status: 'published',
       },
     });
     return models.map((m) => ChallengeMapper.toDomain(m));

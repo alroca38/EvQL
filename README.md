@@ -13,8 +13,7 @@ Sistema backend para la gestión académica de cursos, evaluaciones y calificaci
 5. [Módulos y Endpoints](#módulos-y-endpoints)
 6. [Flujo de Evaluación](#flujo-de-evaluación)
 7. [Autenticación y Roles](#autenticación-y-roles)
-8. [Variables de Entorno](#variables-de-entorno)
-9. [Instalación y Ejecución](#instalación-y-ejecución)
+8. [Instalación y Ejecución](#instalación-y-ejecución)
 
 ---
 
@@ -134,7 +133,7 @@ SubmissionModel
 |---|---|---|---|
 | POST | `/challenges` | Profesor, Admin | Crear challenge |
 | GET | `/challenges` | Profesor, Admin | Listar todos |
-| GET | `/challenges/my` | Estudiante | Mis challenges disponibles |
+| GET | `/challenges/me` | Estudiante | Retos publicados en mis cursos matriculados |
 | GET | `/challenges/:id` | Todos | Obtener por ID |
 | PATCH | `/challenges/:id` | Profesor, Admin | Actualizar |
 | PATCH | `/challenges/:id/status` | Profesor, Admin | Cambiar estado |
@@ -158,7 +157,8 @@ SubmissionModel
 |---|---|---|---|
 | POST | `/submissions` | Estudiante | Enviar solución SQL |
 | GET | `/submissions/me` | Estudiante | Mis submissions (con score, tiempo y feedback) |
-| GET | `/submissions/evaluation/:evalId/challenge/:chalId` | Profesor, Admin | Submissions de un challenge en una evaluación |
+| GET | `/submissions/evaluation/:evalId/challenge/:chalId` | Estudiante | Mis submissions de un challenge en una evaluación |
+| GET | `/submissions/evaluation/:evalId/challenge/:chalId/all` | Profesor, Admin | Submissions de todos los estudiantes para un challenge en una evaluación |
 
 ### Challenge Schemas — `/challenge-schemas`
 
@@ -209,25 +209,6 @@ Los tres roles disponibles son:
 - **`STUDENT`** — accede a sus cursos, envía submissions y consulta sus resultados
 
 El guard `RolesGuard` valida el rol del token contra el decorador `@Roles(...)` de cada endpoint.
-
----
-
-## Variables de Entorno
-
-```env
-# Base de datos
-DATABASE_URL=postgresql://user:password@localhost:5432/evql
-
-# Redis (BullMQ)
-REDIS_HOST=localhost
-REDIS_PORT=6379
-
-# JWT
-JWT_SECRET=tu_clave_secreta
-
-# OpenAI
-OPENAI_API_KEY=sk-...
-```
 
 ---
 

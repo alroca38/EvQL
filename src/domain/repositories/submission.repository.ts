@@ -5,5 +5,6 @@ export interface ISubmissionRepository {
     save(submission: Submission): Promise<void>;
     findByStudentId(studentId: string): Promise<Submission[]>;
     findByStudentAndChallenge(studentId: string, challengeId: string): Promise<Submission[]>;
+    findByChallengeId(challengeId: string): Promise<Submission[]>;
     updateStatus(submissionId: string, status: SubmissionStatus): Promise<void>;
 }

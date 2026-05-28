@@ -59,10 +59,11 @@ export class ChallengeController {
     return this.getAllUseCase.execute();
   }
 
-  @Get(':id')
-  @ApiOperation({ summary: 'Get a challenge by ID' })
-  async findOne(@Param('id') id: string) {
-    return this.getOneUseCase.execute(id);
+  @Get('me')
+  @Roles(Role.STUDENT)
+  @ApiOperation({ summary: 'Get available challenges for the current student' })
+  async findMyAvailableChallenges(@Req() req: any) {
+    return this.getMyAvailableChallengesUseCase.execute(req.user.userId);
   }
 
   @Get('course/:courseId')
@@ -71,11 +72,10 @@ export class ChallengeController {
     return this.getByCourseUseCase.execute(courseId);
   }
 
-  @Get('me')
-  @Roles(Role.STUDENT)
-  @ApiOperation({ summary: 'Get available challenges for the current student' })
-  async findMyAvailableChallenges(@Req() req: any) {
-    return this.getMyAvailableChallengesUseCase.execute(req.user.userId);
+  @Get(':id')
+  @ApiOperation({ summary: 'Get a challenge by ID' })
+  async findOne(@Param('id') id: string) {
+    return this.getOneUseCase.execute(id);
   }
 
   @Get('evaluation/:id')
