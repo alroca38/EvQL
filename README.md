@@ -133,7 +133,7 @@ SubmissionModel
 |---|---|---|---|
 | POST | `/challenges` | Profesor, Admin | Crear challenge |
 | GET | `/challenges` | Profesor, Admin | Listar todos |
-| GET | `/challenges/me` | Estudiante | Retos publicados en mis cursos matriculados |
+| GET | `/challenges/my` | Estudiante | Mis challenges disponibles |
 | GET | `/challenges/:id` | Todos | Obtener por ID |
 | PATCH | `/challenges/:id` | Profesor, Admin | Actualizar |
 | PATCH | `/challenges/:id/status` | Profesor, Admin | Cambiar estado |
@@ -157,8 +157,7 @@ SubmissionModel
 |---|---|---|---|
 | POST | `/submissions` | Estudiante | Enviar solución SQL |
 | GET | `/submissions/me` | Estudiante | Mis submissions (con score, tiempo y feedback) |
-| GET | `/submissions/evaluation/:evalId/challenge/:chalId` | Estudiante | Mis submissions de un challenge en una evaluación |
-| GET | `/submissions/evaluation/:evalId/challenge/:chalId/all` | Profesor, Admin | Submissions de todos los estudiantes para un challenge en una evaluación |
+| GET | `/submissions/evaluation/:evalId/challenge/:chalId` | Profesor, Admin | Submissions de un challenge en una evaluación |
 
 ### Challenge Schemas — `/challenge-schemas`
 
