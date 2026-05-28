@@ -133,7 +133,7 @@ SubmissionModel
 |---|---|---|---|
 | POST | `/challenges` | Profesor, Admin | Crear challenge |
 | GET | `/challenges` | Profesor, Admin | Listar todos |
-| GET | `/challenges/my` | Estudiante | Mis challenges disponibles |
+| GET | `/challenges/me` | Estudiante | Retos publicados en mis cursos matriculados |
 | GET | `/challenges/:id` | Todos | Obtener por ID |
 | PATCH | `/challenges/:id` | Profesor, Admin | Actualizar |
 | PATCH | `/challenges/:id/status` | Profesor, Admin | Cambiar estado |
@@ -157,7 +157,8 @@ SubmissionModel
 |---|---|---|---|
 | POST | `/submissions` | Estudiante | Enviar solución SQL |
 | GET | `/submissions/me` | Estudiante | Mis submissions (con score, tiempo y feedback) |
-| GET | `/submissions/evaluation/:evalId/challenge/:chalId` | Profesor, Admin | Submissions de un challenge en una evaluación |
+| GET | `/submissions/evaluation/:evalId/challenge/:chalId` | Estudiante | Mis submissions de un challenge en una evaluación |
+| GET | `/submissions/evaluation/:evalId/challenge/:chalId/all` | Profesor, Admin | Submissions de todos los estudiantes para un challenge en una evaluación |
 
 ### Challenge Schemas — `/challenge-schemas`
 
@@ -220,28 +221,10 @@ El guard `RolesGuard` valida el rol del token contra el decorador `@Roles(...)` 
 - Redis 7+
 - Docker (necesario para ejecutar las submissions)
 
-### Pasos
+### Ejecución
 
 ```bash
-# 1. Instalar dependencias
-npm install
-
-# 2. Configurar variables de entorno
-cp .env.example .env
-# Editar .env con tus valores
-
-# 3. Ejecutar migraciones de base de datos
-npx prisma migrate deploy
-
-# 4. Generar cliente de Prisma
-npx prisma generate
-
-# 5. Iniciar en modo desarrollo
-npm run start:dev
-
-# 6. Iniciar en modo producción
-npm run build
-npm run start:prod
+docker compose up --build
 ```
 
 La documentación Swagger estará disponible en `http://localhost:3000/api` una vez levantado el servidor.

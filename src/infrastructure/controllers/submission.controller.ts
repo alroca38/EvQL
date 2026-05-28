@@ -6,6 +6,7 @@ import { Role } from '../../domain/entities/role.enum';
 import { SubmitSolutionUseCase } from '../../application/use-cases/submissions/submit-solution.use-case';
 import { GetMySubmissionsUseCase } from '../../application/use-cases/submissions/get-my-submissions.use-case';
 import { GetEvaluationChallengeSubmissionsUseCase } from '../../application/use-cases/submissions/get-evaluation-challenge-submissions.use-case';
+import { GetChallengeSubmissionsUseCase } from '../../application/use-cases/challenges/get-challenge-submissions.use-case';
 import { CreateSubmissionRequestDto } from '../../application/dtos/create-submission.request.dto';
 import { ApiBearerAuth, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 
@@ -18,6 +19,7 @@ export class SubmissionController {
     private readonly submitUseCase: SubmitSolutionUseCase,
     private readonly getMyUseCase: GetMySubmissionsUseCase,
     private readonly getEvaluationChallengeSubmissions: GetEvaluationChallengeSubmissionsUseCase,
+    private readonly getChallengeSubmissionsUseCase: GetChallengeSubmissionsUseCase,
   ) {}
 
   @Post()
@@ -53,5 +55,17 @@ export class SubmissionController {
   ) {
     const studentId: string = req.user.userId;
     return this.getEvaluationChallengeSubmissions.execute(studentId, evaluationId, challengeId);
+  }
+
+  @Get('evaluation/:evaluationId/challenge/:challengeId/all')
+  @Roles(Role.PROFESSOR, Role.ADMIN)
+  @ApiOperation({ summary: 'Get all student submissions for a challenge in an evaluation (professor view)' })
+  @ApiParam({ name: 'evaluationId', type: String })
+  @ApiParam({ name: 'challengeId', type: String })
+  async getAllChallengeSubmissions(
+    @Param('evaluationId') evaluationId: string,
+    @Param('challengeId') challengeId: string,
+  ) {
+    return this.getChallengeSubmissionsUseCase.execute(evaluationId, challengeId);
   }
 }

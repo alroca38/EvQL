@@ -13,6 +13,7 @@ import { SqlAssistantService } from '../../application/services/sql-assistant.se
 import { ChallengeSchemaModule } from './challenge-schema.module';
 import { EvaluationModule } from './evaluation.module';
 import { GetEvaluationChallengeSubmissionsUseCase } from '../../application/use-cases/submissions/get-evaluation-challenge-submissions.use-case';
+import { GetChallengeSubmissionsUseCase } from '../../application/use-cases/challenges/get-challenge-submissions.use-case';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { GetEvaluationChallengeSubmissionsUseCase } from '../../application/use-
     SubmitSolutionUseCase,
     GetMySubmissionsUseCase,
     GetEvaluationChallengeSubmissionsUseCase,
+    GetChallengeSubmissionsUseCase,
     SqlEvaluationWorker,
     SqlAssistantService,
   ],
