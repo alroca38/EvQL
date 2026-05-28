@@ -221,28 +221,10 @@ El guard `RolesGuard` valida el rol del token contra el decorador `@Roles(...)` 
 - Redis 7+
 - Docker (necesario para ejecutar las submissions)
 
-### Pasos
+### Ejecución
 
 ```bash
-# 1. Instalar dependencias
-npm install
-
-# 2. Configurar variables de entorno
-cp .env.example .env
-# Editar .env con tus valores
-
-# 3. Ejecutar migraciones de base de datos
-npx prisma migrate deploy
-
-# 4. Generar cliente de Prisma
-npx prisma generate
-
-# 5. Iniciar en modo desarrollo
-npm run start:dev
-
-# 6. Iniciar en modo producción
-npm run build
-npm run start:prod
+docker compose up --build
 ```
 
 La documentación Swagger estará disponible en `http://localhost:3000/api` una vez levantado el servidor.
